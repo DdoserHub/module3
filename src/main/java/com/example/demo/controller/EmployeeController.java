@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.PartialUpdateDTO;
 import com.example.demo.dto.RequestDTO;
 import com.example.demo.dto.ResponseDTO;
+import com.example.demo.enums.Role;
 import com.example.demo.service.EmployeeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +23,9 @@ public class EmployeeController {
     }
 
     @GetMapping("/employee")
-    public Map<Integer, ResponseDTO> getEmployee() {
-        return employeeService.getAllEmployee();
+    public Map<Integer, ResponseDTO> getEmployee(
+            @RequestParam(required = false) String sortBy) {
+        return employeeService.getAllEmployee(sortBy);
     }
 
     @GetMapping("/employee/{id}")
