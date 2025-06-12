@@ -83,7 +83,7 @@ public class EmployeeService {
             currentEmployee.setFirstName(requestDTO.getFirstName());
         }
         if (requestDTO.getSurname() != null) {
-            currentEmployee.setFirstName(requestDTO.getSurname());
+            currentEmployee.setSurname(requestDTO.getSurname());
         }
 
         Employee partialUpdatedEmployee = employeeRepository.partialUpdateEmployee(id, currentEmployee);
