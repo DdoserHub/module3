@@ -6,8 +6,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ResponseDTO {
-    private String firstName;
+public class EmployeeResponseDTO {
+    private String name;
     private String surname;
     private String email;
     private Role role;

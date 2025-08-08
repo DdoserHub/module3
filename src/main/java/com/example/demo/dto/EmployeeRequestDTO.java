@@ -10,9 +10,10 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class RequestDTO {
+public class EmployeeRequestDTO {
+
     @NotBlank
-    private String firstName;
+    private String name;
 
     @NotBlank
     private String surname;

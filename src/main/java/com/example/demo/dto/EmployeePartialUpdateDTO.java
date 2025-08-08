@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PartialUpdateDTO {
-    private String firstName;
+public class EmployeePartialUpdateDTO {
+    private String name;
     private String surname;
 }

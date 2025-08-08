@@ -1,93 +1,84 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.PartialUpdateDTO;
-import com.example.demo.dto.RequestDTO;
-import com.example.demo.dto.ResponseDTO;
+import com.example.demo.dto.EmployeePartialUpdateDTO;
+import com.example.demo.dto.EmployeeRequestDTO;
+import com.example.demo.dto.EmployeeResponseDTO;
 import com.example.demo.entity.Employee;
 
-import static com.example.demo.mapper.EmployeeMapper.requestToEmployee;
-import static com.example.demo.mapper.EmployeeMapper.employeeToResponseDTO;
-
+import com.example.demo.mapper.EmployeeMapper;
 import com.example.demo.repository.EmployeeRepository;
+import com.example.demo.specification.EmployeeSpecification;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class EmployeeService {
+
+    private final EmployeeMapper employeeMapper;
     private final EmployeeRepository employeeRepository;
 
-    public ResponseDTO addEmployee(RequestDTO requestDTO) {
-        Employee newEmployee = requestToEmployee(requestDTO);
+    public EmployeeResponseDTO addEmployee(EmployeeRequestDTO employeeRequestDTO) {
+        Employee newEmployee = employeeMapper.toEmployee(employeeRequestDTO);
 
-        Optional<Employee> employeeOptional = employeeRepository.getAllEmployee()
-                .values()
-                .stream()
-                .filter(employee -> employee.getEmail().equals(newEmployee.getEmail()))
-                .findFirst();
-
-        if (employeeOptional.isPresent())
-            throw new IllegalArgumentException();
-
-        Employee employee = employeeRepository.addEmployee(newEmployee);
-        return employeeToResponseDTO(employee);
-    }
-
-    public Map<Integer, ResponseDTO> getAllEmployee(String sortBy) {
-        Map<Integer, Employee> allEmployee = employeeRepository.getAllEmployee();
-
-        if (sortBy.equals("surname")) {
-            return allEmployee.entrySet()
-                    .stream()
-                    .sorted(Comparator.comparing(elm -> elm.getValue().getSurname()))
-                    .collect(Collectors.toMap(
-                            Map.Entry::getKey,
-                            value -> employeeToResponseDTO(value.getValue()),
-                            (e1, e2) -> e1,
-                            LinkedHashMap::new));
+        try {
+            employeeRepository.save(newEmployee);
+        } catch (Exception e) {
+            System.out.println("При добавлении произошла ошибка: " + e);
         }
-
-        return allEmployee.entrySet()
-                .stream()
-                .collect(Collectors.toMap(Map.Entry::getKey,
-                        value -> employeeToResponseDTO(value.getValue())));
+        return employeeMapper.toResponseDTO(newEmployee);
     }
 
-    public ResponseDTO getEmployeeById(int id) {
-        Employee employee = employeeRepository.getEmployeeById(id);
-        if (employee == null) {
-            throw new IllegalArgumentException();
-        }
-        return employeeToResponseDTO(employee);
+    public Page<EmployeeResponseDTO> getAllEmployee(String name, String surname,
+                                                    int page, int size,
+                                                    String sortBy, String direction) {
+
+        String sortField = (sortBy != null && (sortBy.equals("name") || sortBy.equals("surname"))) ? sortBy : "id";
+        Sort.Direction sortDirection = (direction.equals("DESC")) ? Sort.Direction.DESC : Sort.Direction.ASC;
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortField));
+        Specification<Employee> specification = EmployeeSpecification.filterBy(name, surname);
+
+        return employeeRepository.findAll(specification, pageable)
+                .map(employeeMapper::toResponseDTO);
+
     }
 
-    public boolean deleteEmployeeById(int id) {
-        Employee deleteEmployee = employeeRepository.deleteEmployee(id);
+    public EmployeeResponseDTO getEmployeeById(long id) {
+        Optional<Employee> currentEmployeeOptional = employeeRepository.findById(id);
+        return currentEmployeeOptional.map(employeeMapper::toResponseDTO).orElse(null);
+    }
 
-        if (deleteEmployee == null) {
-            throw new IllegalArgumentException();
+    public boolean deleteEmployeeById(Long id) {
+
+        try {
+            employeeRepository.deleteById(id);
+        } catch (Exception e) {
+            System.out.println("Ошибка при удалении: " + e);
+            return false;
         }
         return true;
     }
 
-    public ResponseDTO partialUpdateEmployee(int id, PartialUpdateDTO requestDTO) {
-        Employee currentEmployee = employeeRepository.getEmployeeById(id);
+    public EmployeeResponseDTO partialUpdateEmployee(Long id, EmployeePartialUpdateDTO requestDTO) {
+        Optional<Employee> currentEmployeeOptional = employeeRepository.findById(id);
 
-        if (requestDTO.getFirstName() != null) {
-            currentEmployee.setFirstName(requestDTO.getFirstName());
+        if (currentEmployeeOptional.isPresent()) {
+            if (requestDTO.getName() != null && requestDTO.getSurname() != null) {
+                Employee currentEmployee = currentEmployeeOptional.get();
+                currentEmployee.setName(requestDTO.getName());
+                currentEmployee.setSurname(requestDTO.getSurname());
+                employeeRepository.save(currentEmployee);
+                return employeeMapper.toResponseDTO(currentEmployee);
+            }
         }
-        if (requestDTO.getSurname() != null) {
-            currentEmployee.setSurname(requestDTO.getSurname());
-        }
-
-        Employee partialUpdatedEmployee = employeeRepository.partialUpdateEmployee(id, currentEmployee);
-        return employeeToResponseDTO(partialUpdatedEmployee);
+        return null;
     }
-
 }
