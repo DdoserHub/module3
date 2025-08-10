@@ -1,8 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.EmployeePartialUpdateDTO;
-import com.example.demo.dto.EmployeeRequestDTO;
-import com.example.demo.dto.EmployeeResponseDTO;
+import com.example.demo.dto.EmployeeDTO.EmployeePartialUpdateDTO;
+import com.example.demo.dto.EmployeeDTO.EmployeeRequestDTO;
+import com.example.demo.dto.EmployeeDTO.EmployeeResponseDTO;
 import com.example.demo.service.EmployeeService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
@@ -30,13 +30,12 @@ public class EmployeeController {
                                                  @RequestParam(defaultValue = "0") @Min(0) int page,
                                                  @RequestParam(defaultValue = "10") @Min(1) @Max(100) int size,
                                                  @RequestParam(required = false) String sortBy,
-                                                 @RequestParam(defaultValue = "asc") String direction
-    ) {
+                                                 @RequestParam(defaultValue = "asc") String direction) {
         return employeeService.getAllEmployee(name, surname, page, size, sortBy, direction);
     }
 
     @GetMapping("/employee/{id}")
-    public EmployeeResponseDTO getEmployeeById(@PathVariable int id) {
+    public EmployeeResponseDTO getEmployeeById(@PathVariable Long id) {
         return employeeService.getEmployeeById(id);
     }
 
@@ -47,7 +46,7 @@ public class EmployeeController {
 
     @PatchMapping("/employee/{id}")
     public EmployeeResponseDTO partialUpdateEmployee(@PathVariable Long id,
-                                                     @RequestBody EmployeePartialUpdateDTO partialRequestDTO) {
+                                                     @Valid @RequestBody EmployeePartialUpdateDTO partialRequestDTO) {
         return employeeService.partialUpdateEmployee(id, partialRequestDTO);
     }
 }

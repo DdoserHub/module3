@@ -1,16 +1,16 @@
 package com.example.demo.entity;
 
-import com.example.demo.enums.Role;
+import com.example.demo.enums.EmployeeRole;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 @Entity
+@Table(name = "employee")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "employee")
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,5 +29,5 @@ public class Employee {
     private String password;
 
     @Column(name = "role")
-    private Role role;
+    private EmployeeRole employeeRole;
 }

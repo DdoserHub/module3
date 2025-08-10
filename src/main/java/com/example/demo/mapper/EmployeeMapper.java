@@ -1,7 +1,7 @@
 package com.example.demo.mapper;
 
-import com.example.demo.dto.EmployeeRequestDTO;
-import com.example.demo.dto.EmployeeResponseDTO;
+import com.example.demo.dto.EmployeeDTO.EmployeeRequestDTO;
+import com.example.demo.dto.EmployeeDTO.EmployeeResponseDTO;
 import com.example.demo.entity.Employee;
 import org.mapstruct.Mapper;
 

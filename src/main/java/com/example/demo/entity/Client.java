@@ -1,0 +1,44 @@
+package com.example.demo.entity;
+
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.FetchType;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+
+import java.util.List;
+
+@Entity
+@Table(name = "client")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Client {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "surname")
+    private String surname;
+
+    @Column(name = "email", unique = true)
+    private String email;
+
+    @Column(name = "number")
+    private String number;
+
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
+    private List<Order> orders;
+}

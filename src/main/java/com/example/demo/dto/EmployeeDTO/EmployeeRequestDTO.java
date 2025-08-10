@@ -1,6 +1,6 @@
-package com.example.demo.dto;
+package com.example.demo.dto.EmployeeDTO;
 
-import com.example.demo.enums.Role;
+import com.example.demo.enums.EmployeeRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -25,5 +25,5 @@ public class EmployeeRequestDTO {
     private String password;
 
     @NotNull
-    private Role role;
+    private EmployeeRole employeeRole;
 }

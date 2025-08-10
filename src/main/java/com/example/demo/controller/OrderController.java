@@ -1,0 +1,53 @@
+package com.example.demo.controller;
+
+import com.example.demo.dto.OrderDTO.OrderRequestDTO;
+import com.example.demo.dto.OrderDTO.OrderResponseDTO;
+import com.example.demo.dto.OrderDTO.OrderStatusDTO;
+import com.example.demo.enums.OrderStatus;
+import com.example.demo.service.OrderService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.Instant;
+
+@RestController
+@RequiredArgsConstructor
+public class OrderController {
+
+    private final OrderService orderService;
+
+    @PostMapping("/order")
+    public OrderResponseDTO addOrder(@Valid @RequestBody OrderRequestDTO orderRequestDTO) {
+        return orderService.addOrder(orderRequestDTO);
+    }
+
+    @PatchMapping("/order/{id}")
+    public OrderResponseDTO updateOrderStatus(@PathVariable Long id,
+                                              @Valid @RequestBody OrderStatusDTO orderStatusDTO) {
+        return orderService.updateOrderStatus(id, orderStatusDTO);
+    }
+
+    @DeleteMapping("/order/{id}")
+    public boolean deleteOrder(@PathVariable Long id) {
+        return orderService.deleteOrder(id);
+    }
+
+    @GetMapping("/order")
+    public Page<OrderResponseDTO> getOrder(@Valid @RequestParam(required = false) OrderStatus status,
+                                           @RequestParam(required = false) Instant createdAt,
+                                           @RequestParam(defaultValue = "asc") String directional,
+                                           @RequestParam(required = false) String sortBy,
+                                           @RequestParam(defaultValue = "0") @Min(0) int page,
+                                           @RequestParam(defaultValue = "10") @Min(1) @Max(10) int size) {
+        return orderService.getOrder(status, createdAt, directional, sortBy, page, size);
+    }
+
+    @GetMapping("/order/{id}")
+    public OrderResponseDTO getOrderById(@PathVariable Long id) {
+        return orderService.getOrderById(id);
+    }
+}

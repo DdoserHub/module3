@@ -1,14 +1,14 @@
-package com.example.demo.dto;
+package com.example.demo.dto.ClientDTO;
 
-import com.example.demo.enums.Role;
 import lombok.Getter;
 import lombok.Setter;
 
+
 @Getter
 @Setter
-public class EmployeeResponseDTO {
+public class ClientResponseDTO {
     private String name;
     private String surname;
     private String email;
-    private Role role;
+    private String number;
 }

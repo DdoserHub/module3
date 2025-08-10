@@ -1,8 +1,8 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.EmployeePartialUpdateDTO;
-import com.example.demo.dto.EmployeeRequestDTO;
-import com.example.demo.dto.EmployeeResponseDTO;
+import com.example.demo.dto.EmployeeDTO.EmployeePartialUpdateDTO;
+import com.example.demo.dto.EmployeeDTO.EmployeeRequestDTO;
+import com.example.demo.dto.EmployeeDTO.EmployeeResponseDTO;
 import com.example.demo.entity.Employee;
 
 import com.example.demo.mapper.EmployeeMapper;
