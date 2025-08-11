@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNotFound(NotFoundException ex, HttpServletRequest req) {
+    public ResponseEntity<ErrorResponse> handleNotFound(NotFoundException exception) {
         ErrorResponse body = new ErrorResponse(
                 HttpStatus.NOT_FOUND.value(),
                 HttpStatus.NOT_FOUND.getReasonPhrase(),
-                ex.getMessage()
+                exception.getMessage()
         );
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
