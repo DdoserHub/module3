@@ -69,7 +69,6 @@ public class OrderService {
         return true;
     }
 
-    @Transactional
     public boolean deleteOrderItem(Long id, OrderAddItemsRequest orderAddItemsRequest) {
         Order currentOrder = orderRepository.getOrderOrThrow(id);
 

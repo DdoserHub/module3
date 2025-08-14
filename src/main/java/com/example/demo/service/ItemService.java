@@ -30,10 +30,10 @@ public class ItemService {
         return itemMapper.toItemResponseDTO(newItem);
     }
 
-    @Transactional
     public ItemResponseDTO partialUpdateItem(Long id, ItemPartialUpdateDTO itemPartialUpdateDTO) {
         Item currentItem = itemRepository.getItemOrThrow(id);
         itemMapper.partialUpdateRequestDTO(itemPartialUpdateDTO, currentItem);
+        itemRepository.save(currentItem);
         return itemMapper.toItemResponseDTO(currentItem);
     }
 
