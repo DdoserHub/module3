@@ -1,8 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.OrderDTO.OrderRequestDTO;
-import com.example.demo.dto.OrderDTO.OrderResponseDTO;
-import com.example.demo.dto.OrderDTO.OrderStatusDTO;
+import com.example.demo.dto.OrderDTO.*;
 import com.example.demo.enums.OrderStatus;
 import com.example.demo.service.OrderService;
 import jakarta.validation.Valid;
@@ -25,6 +23,12 @@ public class OrderController {
         return orderService.addOrder(orderRequestDTO);
     }
 
+    @PostMapping("/order/{id}/item")
+    public OrderResponseDTO addOrderItem(@PathVariable Long id,
+                                         @RequestBody OrderAddItemsRequest orderAddItemsRequest) {
+        return orderService.addOrderItem(id, orderAddItemsRequest);
+    }
+
     @PatchMapping("/order/{id}")
     public OrderResponseDTO updateOrderStatus(@PathVariable Long id,
                                               @Valid @RequestBody OrderStatusDTO orderStatusDTO) {
@@ -36,14 +40,21 @@ public class OrderController {
         return orderService.deleteOrder(id);
     }
 
+    @DeleteMapping("/order/{id}/item")
+    public boolean deleteOrderItem(@PathVariable Long id,
+                                   @RequestBody OrderAddItemsRequest orderAddItemsRequest) {
+        return orderService.deleteOrderItem(id, orderAddItemsRequest);
+    }
+
     @GetMapping("/order")
     public Page<OrderResponseDTO> getOrder(@Valid @RequestParam(required = false) OrderStatus status,
+                                           @RequestParam(required = false) Long itemId,
                                            @RequestParam(required = false) Instant createdAt,
                                            @RequestParam(defaultValue = "asc") String directional,
                                            @RequestParam(required = false) String sortBy,
                                            @RequestParam(defaultValue = "0") @Min(0) int page,
                                            @RequestParam(defaultValue = "10") @Min(1) @Max(10) int size) {
-        return orderService.getOrder(status, createdAt, directional, sortBy, page, size);
+        return orderService.getOrder(status, createdAt, itemId, directional, sortBy, page, size);
     }
 
     @GetMapping("/order/{id}")

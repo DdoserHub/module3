@@ -2,7 +2,6 @@ package com.example.demo.ExceptionHandler;
 
 import com.example.demo.dto.ErrorResponse.ErrorResponse;
 import com.example.demo.exception.NotFoundException;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

@@ -27,12 +27,7 @@ public class EmployeeService {
 
     public EmployeeResponseDTO addEmployee(EmployeeRequestDTO employeeRequestDTO) {
         Employee newEmployee = employeeMapper.toEmployee(employeeRequestDTO);
-
-        try {
-            employeeRepository.save(newEmployee);
-        } catch (Exception e) {
-            System.out.println("При добавлении произошла ошибка: " + e);
-        }
+        employeeRepository.save(newEmployee);
         return employeeMapper.toResponseDTO(newEmployee);
     }
 
@@ -40,10 +35,16 @@ public class EmployeeService {
                                                     int page, int size,
                                                     String sortBy, String direction) {
 
-        String sortField = (sortBy != null && (sortBy.equals("name") || sortBy.equals("surname"))) ? sortBy : "id";
-        Sort.Direction sortDirection = (direction.equals("DESC")) ? Sort.Direction.DESC : Sort.Direction.ASC;
+        String sortField = sortBy != null && (sortBy.equals("name") || sortBy.equals("surname"))
+                ? sortBy
+                : "id";
+
+        Sort.Direction sortDirection = direction != null && direction.equals("desc")
+                ? Sort.Direction.DESC
+                : Sort.Direction.ASC;
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortField));
+
         Specification<Employee> specification = EmployeeSpecification.filterBy(name, surname);
 
         return employeeRepository.findAll(specification, pageable)
@@ -52,33 +53,20 @@ public class EmployeeService {
     }
 
     public EmployeeResponseDTO getEmployeeById(long id) {
-        Optional<Employee> currentEmployeeOptional = employeeRepository.findById(id);
-        return currentEmployeeOptional.map(employeeMapper::toResponseDTO).orElse(null);
+        Employee currentEmployee = employeeRepository.getEmployeeOrThrow(id);
+        return employeeMapper.toResponseDTO(currentEmployee);
     }
 
     public boolean deleteEmployeeById(Long id) {
-
-        try {
-            employeeRepository.deleteById(id);
-        } catch (Exception e) {
-            System.out.println("Ошибка при удалении: " + e);
-            return false;
-        }
+        employeeRepository.getEmployeeOrThrow(id);
+        employeeRepository.deleteById(id);
         return true;
     }
 
-    public EmployeeResponseDTO partialUpdateEmployee(Long id, EmployeePartialUpdateDTO requestDTO) {
-        Optional<Employee> currentEmployeeOptional = employeeRepository.findById(id);
-
-        if (currentEmployeeOptional.isPresent()) {
-            if (requestDTO.getName() != null && requestDTO.getSurname() != null) {
-                Employee currentEmployee = currentEmployeeOptional.get();
-                currentEmployee.setName(requestDTO.getName());
-                currentEmployee.setSurname(requestDTO.getSurname());
-                employeeRepository.save(currentEmployee);
-                return employeeMapper.toResponseDTO(currentEmployee);
-            }
-        }
-        return null;
+    public EmployeeResponseDTO partialUpdateEmployee(Long id, EmployeePartialUpdateDTO employeePartialUpdateDTO) {
+        Employee currentEmployee = employeeRepository.getEmployeeOrThrow(id);
+        employeeMapper.partialUpdateRequestDTO(employeePartialUpdateDTO, currentEmployee);
+        employeeRepository.save(currentEmployee);
+        return employeeMapper.toResponseDTO(currentEmployee);
     }
 }

@@ -1,7 +1,12 @@
 package com.example.demo.entity;
 
 import com.example.demo.enums.EmployeeRole;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Column;
+import jakarta.persistence.GenerationType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;

@@ -20,7 +20,6 @@ public class EmployeeController {
 
     @PostMapping("/employee")
     public EmployeeResponseDTO addEmployee(@Valid @RequestBody EmployeeRequestDTO employeeRequestDTO) {
-        System.out.println(0);
         return employeeService.addEmployee(employeeRequestDTO);
     }
 
