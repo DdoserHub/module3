@@ -20,7 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -88,7 +88,7 @@ public class OrderService {
         return true;
     }
 
-    public Page<OrderResponseDTO> getOrder(OrderStatus status, Instant createdAt,
+    public Page<OrderResponseDTO> getOrder(OrderStatus status, LocalDateTime createdAt,
                                            Long itemId,
                                            String directional, String sortBy,
                                            int page, int size) {

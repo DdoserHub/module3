@@ -1,15 +1,26 @@
 package com.example.demo.dto.OrderDTO;
 
 import com.example.demo.enums.OrderStatus;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@Schema(description = "Информация о заказе без данных клиента")
 public class OrderWithoutClientDTO {
+
+    @Schema(description = "Идентификатор заказа", example = "1001")
     private Long id;
-    private Instant createdAt;
+
+    @Schema(description = "Дата и время создания заказа",
+            type = "string",
+            format = "date-time",
+            example = "2025-09-13T10:15:30Z")
+    private LocalDateTime createdAt;
+
+    @Schema(description = "Статус заказа", example = "В процессе")
     private OrderStatus status;
 }
