@@ -57,13 +57,13 @@ public class EmployeeController {
 
     @Operation(summary = "Удалить работника по id")
     @DeleteMapping("/employee/{id}")
-    public boolean deleteEmployee(@PathVariable Long id) {
+    public boolean deleteEmployee(@PathVariable("id") Long id) {
         return employeeService.deleteEmployeeById(id);
     }
 
     @Operation(summary = "Изменить данные работника")
     @PatchMapping("/employee/{id}")
-    public EmployeeResponseDTO partialUpdateEmployee(@PathVariable Long id,
+    public EmployeeResponseDTO partialUpdateEmployee(@PathVariable("id") Long id,
                                                      @Valid @RequestBody EmployeePartialUpdateDTO partialRequestDTO) {
         return employeeService.partialUpdateEmployee(id, partialRequestDTO);
     }

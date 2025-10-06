@@ -8,8 +8,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long>, JpaSpecificationExecutor<Item> {
-    default Item getItemOrThrow(Long id) {
-        return findById(id)
-                .orElseThrow(() -> new NotFoundException("Товар с id: " + id + " не найден"));
-    }
 }

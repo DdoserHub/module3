@@ -31,20 +31,20 @@ public class ItemController {
 
     @Operation(summary = "Изменить товар")
     @PatchMapping("/item/{id}")
-    public ItemResponseDTO partialUpdateItem(@PathVariable Long id,
+    public ItemResponseDTO partialUpdateItem(@PathVariable("id") Long id,
                                              @RequestBody ItemPartialUpdateDTO itemPartialUpdateDTO) {
         return itemService.partialUpdateItem(id, itemPartialUpdateDTO);
     }
 
     @Operation(summary = "Удалить товар по id")
     @DeleteMapping("/item/{id}")
-    public boolean deleteItem(@PathVariable Long id) {
+    public boolean deleteItem(@PathVariable("id") Long id) {
         return itemService.deleteItem(id);
     }
 
     @Operation(summary = "Получить товар по id")
     @GetMapping("/item/{id}")
-    public ItemResponseDTO getItemById(@PathVariable Long id) {
+    public ItemResponseDTO getItemById(@PathVariable("id") Long id) {
         return itemService.getItemById(id);
     }
 

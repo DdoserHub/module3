@@ -8,6 +8,9 @@ import lombok.Setter;
 @Setter
 public class ItemResponseDTO {
 
+    @Schema(description = "id товара", example = "1")
+    private Long id;
+
     @Schema(description = "Название товара", example = "Смартфон")
     private String name;
 

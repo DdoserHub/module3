@@ -17,13 +17,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-
-import java.util.List;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -45,7 +44,7 @@ public class ClientControllerTest {
                 "Ivan", "Ivanov",
                 "example@mail.ru", "79005553535");
         this.response = new ClientResponseDTO(
-                "Ivan", "Ivanov",
+                1L, "Ivan", "Ivanov",
                 "example@mail.ru", "79005553535");
         this.requestUpdate = new ClientPartialUpdateDTO(
                 "Ivan", "Ivanov",
@@ -55,6 +54,7 @@ public class ClientControllerTest {
     @Test
     public void addClient_shouldReturnResponseDTO() {
         when(clientService.addClient(request)).thenReturn(response);
+
         ClientResponseDTO result = clientController.addClient(request);
 
         assertEquals(response, result);
@@ -64,6 +64,7 @@ public class ClientControllerTest {
     @Test
     public void partialUpdateClient_shouldReturnResponseDTO() {
         when(clientService.partialUpdateClient(1L, requestUpdate)).thenReturn(response);
+
         ClientResponseDTO result = clientController.partialUpdateClient(1L, requestUpdate);
 
         assertEquals(response, result);
@@ -77,7 +78,6 @@ public class ClientControllerTest {
 
         assertTrue(result);
         verify(clientService).deleteClient(1L);
-
     }
 
     @Test
@@ -99,7 +99,8 @@ public class ClientControllerTest {
                 "some@mail.ru", "79005553535",
                 0, 10);
 
-        assertEquals(pageClientResponseDTO, result);
+        assertEquals(pageClientResponseDTO.getContent(), result.getContent());
+        assertEquals(pageClientResponseDTO.getTotalElements(), result.getTotalElements());
         verify(clientService).getClient(
                 "Ivan", "ASC",
                 "name", "Ivanov",
@@ -110,7 +111,7 @@ public class ClientControllerTest {
     @Test
     public void getClientById_shouldReturnClientWithOrdersResponseDTO() {
         var responseWithOrders = new ClientWithOrdersResponseDTO(
-                "Ivan", "Ivanov",
+                1L, "Ivan", "Ivanov",
                 "example@mail.ru", "79005553535",
                 null);
         when(clientService.getClientById(1L)).thenReturn(responseWithOrders);

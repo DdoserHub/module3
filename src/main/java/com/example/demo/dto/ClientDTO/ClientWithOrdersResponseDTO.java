@@ -3,6 +3,8 @@ package com.example.demo.dto.ClientDTO;
 import com.example.demo.dto.OrderDTO.OrderWithoutClientDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +12,12 @@ import java.util.List;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@EqualsAndHashCode
 public class ClientWithOrdersResponseDTO {
+
+    @Schema(description = "id клиента", example = "1")
+    private Long id;
 
     @Schema(description = "Имя клиента", example = "Иван")
     private String name;

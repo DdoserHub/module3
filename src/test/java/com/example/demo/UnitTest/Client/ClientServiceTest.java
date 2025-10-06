@@ -24,6 +24,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 
 import java.util.List;
+import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 public class ClientServiceTest {
@@ -53,13 +54,13 @@ public class ClientServiceTest {
                 "Ivan", "Ivanov",
                 "example@mail.ru", "79005553535");
         this.response = new ClientResponseDTO(
-                "Ivan", "Ivanov",
+                1L,"Ivan", "Ivanov",
                 "example@mail.ru", "79005553535");
         this.requestUpdate = new ClientPartialUpdateDTO(
                 "Ivan", "Ivanov",
                 "example@mail.ru", "79005553535");
 
-        this.notFoundException = new NotFoundException("Клиент с id: 1L не найден");
+        this.notFoundException = new NotFoundException("Клиент с id: 1 не найден");
     }
 
     @Test
@@ -71,51 +72,53 @@ public class ClientServiceTest {
 
         assertEquals(response, result);
         verify(clientMapper).toClient(request);
+        verify(clientRepository).save(client);
         verify(clientMapper).toResponseDTO(client);
     }
 
     @Test
     public void partialUpdateClient_shouldReturnClientResponseDTO() {
-        when(clientRepository.getClientOrThrow(1L)).thenReturn(client);
+        when(clientRepository.findById(1L)).thenReturn(Optional.of(client));
         when(clientMapper.toResponseDTO(client)).thenReturn(response);
 
         ClientResponseDTO result = clientService.partialUpdateClient(1L, requestUpdate);
 
         assertEquals(response, result);
-        verify(clientRepository).getClientOrThrow(1L);
+        verify(clientRepository).findById(1L);
+        verify(clientRepository).save(client);
         verify(clientMapper).toResponseDTO(client);
     }
 
     @Test
     public void partialUpdateClient_shouldThrowNotFoundException() {
-        when(clientRepository.getClientOrThrow(1L)).thenThrow(notFoundException);
+        when(clientRepository.findById(1L)).thenThrow(notFoundException);
 
         NotFoundException result = assertThrows(NotFoundException.class,
                 () -> clientService.partialUpdateClient(1L, requestUpdate));
 
         assertEquals(result.getMessage(), notFoundException.getMessage());
-        verify(clientRepository).getClientOrThrow(1L);
+        verify(clientRepository).findById(1L);
     }
 
     @Test
     public void deleteClient_shouldReturnBoolean() {
-        when(clientRepository.getClientOrThrow(1L)).thenReturn(client);
+        when(clientRepository.findById(1L)).thenReturn(Optional.of(client));
 
         boolean result = clientService.deleteClient(1L);
 
         assertTrue(result);
-        verify(clientRepository).getClientOrThrow(1L);
+        verify(clientRepository).findById(1L);
     }
 
     @Test
     public void deleteClient_shouldThrowNotFoundException() {
-        when(clientRepository.getClientOrThrow(1L)).thenThrow(notFoundException);
+        when(clientRepository.findById(1L)).thenThrow(notFoundException);
 
         NotFoundException result = assertThrows(NotFoundException.class,
                 () -> clientService.deleteClient(1L));
 
         assertEquals(result.getMessage(), notFoundException.getMessage());
-        verify(clientRepository).getClientOrThrow(1L);
+        verify(clientRepository).findById(1L);
     }
 
     @Test
@@ -134,7 +137,8 @@ public class ClientServiceTest {
                 "some@mail.ru", "79005553535",
                 0, 10);
 
-        assertEquals(pageClientResponseDTO, result);
+        assertEquals(responseList, result.getContent());
+        assertEquals(responseList.size(), result.getTotalElements());
         verify(clientRepository).findAll(any(Specification.class), any(Pageable.class));
         verify(clientMapper).toResponseDTO(client);
     }
@@ -142,29 +146,29 @@ public class ClientServiceTest {
     @Test
     public void getClientById_shouldReturnClientWithOrdersResponseDTO() {
         var responseWithOrders = new ClientWithOrdersResponseDTO(
-                "Ivan", "Ivanov",
+                1L,"Ivan", "Ivanov",
                 "example@mail.ru", "79005553535",
                 null);
-        when(clientRepository.getClientOrThrow(1L)).thenReturn(client);
+        when(clientRepository.findById(1L)).thenReturn(Optional.of(client));
         when(clientMapper.toResponseWithOrderDTO(client)).thenReturn(responseWithOrders);
 
         ClientWithOrdersResponseDTO result = clientService.getClientById(1L);
 
         assertEquals(responseWithOrders, result);
-        verify(clientRepository).getClientOrThrow(1L);
-        verify(clientMapper).toResponseDTO(client);
+        verify(clientRepository).findById(1L);
+        verify(clientMapper).toResponseWithOrderDTO(client);
     }
 
     @Test
     public void getClientById_shouldThrowNotFoundException() {
-        when(clientRepository.getClientOrThrow(1L)).thenThrow(notFoundException);
+        when(clientRepository.findById(1L)).thenReturn(Optional.empty());
 
         NotFoundException result = assertThrows(NotFoundException.class,
                 () -> clientService.getClientById(1L));
 
 
         assertEquals(notFoundException.getMessage(), result.getMessage());
-        verify(clientRepository).getClientOrThrow(1L);
+        verify(clientRepository).findById(1L);
     }
 
 }

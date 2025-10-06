@@ -8,8 +8,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long>, JpaSpecificationExecutor<Client> {
-    default Client getClientOrThrow(Long id) {
-        return findById(id)
-                .orElseThrow(() -> new NotFoundException("Клиент с id: " + id + " не найден"));
-    }
 }

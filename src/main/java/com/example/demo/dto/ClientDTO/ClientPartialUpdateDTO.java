@@ -2,11 +2,13 @@ package com.example.demo.dto.ClientDTO;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class ClientPartialUpdateDTO {
 
     @Schema(description = "Имя клиента", example = "Иван")

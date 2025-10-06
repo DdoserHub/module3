@@ -14,6 +14,9 @@ import java.util.Set;
 @Setter
 public class OrderResponseDTO {
 
+    @Schema(description = "id заказа", example = "1")
+    private Long id;
+
     @Schema(description = "Дата и время создания заказа",
             type = "string",
             format = "date-time",

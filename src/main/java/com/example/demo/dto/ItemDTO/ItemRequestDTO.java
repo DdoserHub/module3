@@ -3,6 +3,7 @@ package com.example.demo.dto.ItemDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,6 +20,7 @@ public class ItemRequestDTO {
     private String description;
 
     @Min(0)
+    @NotNull
     @Schema(description = "Стоимость товара (не может быть отрицательной)", example = "19990")
     private Integer cost;
 }

@@ -59,14 +59,13 @@ public class JwtService {
     }
 
     private Claims extractAllClaims(String token) {
-
-        JwtParserBuilder parser = Jwts.parser();
-        parser.verifyWith(getSigningKey());
-
-        return parser.build()
+        return Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
                 .parseSignedClaims(token)
                 .getPayload();
     }
+
 
     public <T> T extractClaim(String token, Function<Claims, T> resolver) {
 
