@@ -23,13 +23,14 @@ public class EmployeeRequestDTO {
 
     @Email
     @Schema(description = "Email сотрудника", example = "ivan@example.com")
+    @NotBlank
     private String email;
 
     @Size(min = 6, message = "Пароль должен быть не менее 6 символов")
     @Schema(description = "Пароль сотрудника (не менее 6 символов)", example = "password123")
     private String password;
 
-    @NotNull
+    @NotBlank
     @Schema(description = "Роль сотрудника", example = "ADMIN")
     private EmployeeRole employeeRole;
 }

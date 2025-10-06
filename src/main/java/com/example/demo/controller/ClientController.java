@@ -44,7 +44,7 @@ public class ClientController {
 
     @Operation(summary = "Изменить данные клиента")
     @PatchMapping("/client/{id}")
-    public ClientResponseDTO partialUpdateClient(@PathVariable Long id,
+    public ClientResponseDTO partialUpdateClient(@PathVariable("id") Long id,
                                                  @Valid @RequestBody ClientPartialUpdateDTO dto) {
         log.info("Запрос на частичное обновление клиента id={}: email={}, name={} {}",
                 id, dto.getEmail(), dto.getName(), dto.getSurname());
@@ -59,16 +59,12 @@ public class ClientController {
 
     @Operation(summary = "Удалить клиента по id")
     @DeleteMapping("/client/{id}")
-    public boolean deleteClient(@PathVariable Long id) {
+    public boolean deleteClient(@PathVariable("id") Long id) {
         log.warn("Запрос на удаление клиента id={}", id);
 
         boolean deleted = clientService.deleteClient(id);
 
-        if (deleted) {
-            log.info("Клиент удалён: id={}", id);
-        } else {
-            log.error("Клиент с id={} не найден для удаления", id);
-        }
+        log.info("Клиент удалён: id={}", id);
 
         return deleted;
     }
@@ -103,17 +99,13 @@ public class ClientController {
 
     @Operation(summary = "Получить клиента по id")
     @GetMapping("/client/{id}")
-    public ClientWithOrdersResponseDTO getClientById(@PathVariable Long id) {
+    public ClientWithOrdersResponseDTO getClientById(@PathVariable("id") Long id) {
         log.info("Запрос на получение клиента по id={}", id);
 
         ClientWithOrdersResponseDTO response = clientService.getClientById(id);
 
-        if (response != null) {
-            log.info("Клиент найден id={}: email={}, name={} {}",
-                    id, response.getEmail(), response.getName(), response.getSurname());
-        } else {
-            log.warn("Клиент не найден id={}", id);
-        }
+        log.info("Клиент найден id={}: email={}, name={} {}",
+                id, response.getEmail(), response.getName(), response.getSurname());
 
         return response;
     }

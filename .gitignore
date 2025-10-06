@@ -32,11 +32,8 @@ build/
 ### VS Code ###
 .vscode/
 
-# Env files
-.env
-
 # Application properties
 src/main/resources/application-dev.properties
 
 #logs
-logs
+logslogs/

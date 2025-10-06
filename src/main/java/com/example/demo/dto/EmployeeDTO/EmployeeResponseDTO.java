@@ -10,6 +10,9 @@ import lombok.Setter;
 @Setter
 public class EmployeeResponseDTO {
 
+    @Schema(description = "id работника", example = "1")
+    private Long id;
+
     @Schema(description = "Имя сотрудника", example = "Алексей")
     private String name;
 

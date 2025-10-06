@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Schema(description = "Информация о заказе без данных клиента")
 public class OrderWithoutClientDTO {
 
-    @Schema(description = "Идентификатор заказа", example = "1001")
+    @Schema(description = "id заказа", example = "1001")
     private Long id;
 
     @Schema(description = "Дата и время создания заказа",

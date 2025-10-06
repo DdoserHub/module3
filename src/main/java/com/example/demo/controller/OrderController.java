@@ -31,27 +31,27 @@ public class OrderController {
 
     @Operation(summary = "Добавить в заказ товар")
     @PostMapping("/order/{id}/item")
-    public OrderResponseDTO addOrderItem(@PathVariable Long id,
+    public OrderResponseDTO addOrderItem(@PathVariable("id") Long id,
                                          @RequestBody OrderAddItemsRequest orderAddItemsRequest) {
         return orderService.addOrderItem(id, orderAddItemsRequest);
     }
 
     @Operation(summary = "Изменить статус заказа")
     @PatchMapping("/order/{id}")
-    public OrderResponseDTO updateOrderStatus(@PathVariable Long id,
+    public OrderResponseDTO updateOrderStatus(@PathVariable("id") Long id,
                                               @Valid @RequestBody OrderStatusDTO orderStatusDTO) {
         return orderService.updateOrderStatus(id, orderStatusDTO);
     }
 
     @Operation(summary = "Удалить заказ по id")
     @DeleteMapping("/order/{id}")
-    public boolean deleteOrder(@PathVariable Long id) {
+    public boolean deleteOrder(@PathVariable("id") Long id) {
         return orderService.deleteOrder(id);
     }
 
     @Operation(summary = "Удалить из заказа товар")
     @DeleteMapping("/order/{id}/item")
-    public boolean deleteOrderItem(@PathVariable Long id,
+    public boolean deleteOrderItem(@PathVariable("id") Long id,
                                    @RequestBody OrderAddItemsRequest orderAddItemsRequest) {
         return orderService.deleteOrderItem(id, orderAddItemsRequest);
     }
@@ -78,7 +78,7 @@ public class OrderController {
 
     @Operation(summary = "Получить заказ по id")
     @GetMapping("/order/{id}")
-    public OrderResponseDTO getOrderById(@PathVariable Long id) {
+    public OrderResponseDTO getOrderById(@PathVariable("id") Long id) {
         return orderService.getOrderById(id);
     }
 }
